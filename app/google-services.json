@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "799277408252",
+    "project_id": "academy-it-2024",
+    "storage_bucket": "academy-it-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799277408252:android:174e296e24cb7bf8c1dc79",
+        "android_client_info": {
+          "package_name": "com.academy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4weVr0kJ0C6-aNSfcAR1kCdFB-xB94Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
