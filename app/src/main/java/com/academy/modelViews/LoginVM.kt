@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.academy.Constants
-import com.academy.model.apiInteractions.DTOs.Career
 import com.academy.model.apiInteractions.DTOs.ProgressStudent
 import com.academy.model.apiInteractions.RetrofitClient
 import com.academy.model.apiInteractions.webServices.StudentService
@@ -17,11 +16,6 @@ import com.academy.model.firebase.FirebaseResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginVM(application: Application): AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
@@ -89,10 +83,10 @@ class LoginVM(application: Application): AndroidViewModel(application) {
      * @param navToLanding A lambda function to navigate to the landing screen.
      * @return 0 on success, 1 or more on any errors encountered.
      */
-    suspend fun onLoginSelected(navToLanding:(String) -> Unit): Int {
+    suspend fun onLoginSelected(navToLanding:(ProgressStudent?) -> Unit): Int {
         Log.i("Academy","Inicio el proceso de logueo")
         _isLoading.value = true
-        var userName = ""
+        var userProgresInfo: ProgressStudent? = null
 
         var errorsAlongTheProcess = 0
 
@@ -102,14 +96,14 @@ class LoginVM(application: Application): AndroidViewModel(application) {
             if (errorsAlongTheProcess >= 1) {
                 Log.i(Constants.LOG_TAG.constVal,"Errors along Auth process $errorsAlongTheProcess errors")
             }else{
-                errorsAlongTheProcess += authStep2( onUserNameRetrieved = {userName = it}, email = email.value.toString() )
+                errorsAlongTheProcess += authStep2( onUserNameRetrieved = {userProgresInfo = it}, email = email.value.toString() )
             }
         }.await()
 
         Log.i("IsmInfo","Errors along Auth process $errorsAlongTheProcess errors")
         if (errorsAlongTheProcess == 0)
         {
-            navToLanding(userName)
+            navToLanding(userProgresInfo)
             _isLoading.value = false
             return 0
         }
@@ -146,7 +140,7 @@ class LoginVM(application: Application): AndroidViewModel(application) {
      * Get student info in the API
      */
     suspend fun authStep2(
-        onUserNameRetrieved: (String) -> Unit,
+        onUserNameRetrieved: (ProgressStudent?) -> Unit,
         email: String
     ): Int {
         return try {
@@ -162,7 +156,7 @@ class LoginVM(application: Application): AndroidViewModel(application) {
                     val progressType = object : TypeToken<ProgressStudent>() {}.type
                     val studentInfoResult = Gson().fromJson<ProgressStudent>(responseString, progressType)
 
-                    onUserNameRetrieved(studentInfoResult.student.fullName)
+                    onUserNameRetrieved(studentInfoResult)
                 }
                 0 // Success
             } else {

@@ -12,12 +12,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.academy.model.apiInteractions.DTOs.ProgressStudent
 import com.academy.modelViews.LoginVM
 import com.academy.modelViews.RegisterVM
 import com.academy.ui.theme.AcademyTheme
 import com.academy.views.LoginView
+import com.academy.views.CronogramaPDF
 import com.academy.views.RegisterView
 import com.academy.views.StudentDashView
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     private lateinit var navController : NavHostController
@@ -44,15 +47,23 @@ class MainActivity : ComponentActivity() {
                             LoginView(context = baseContext, viewModel = loginVM, navToRegister = {
                                 navController.navigate(ConstantViews.REGISTER_VIEW.route)
                             }, navToDashBoard = {navController.
-                            navigate(ConstantViews.DASHSTUDENT_VIEW.route + "/${it}")})
+                            navigate(ConstantViews.DASHSTUDENT_VIEW.route +
+                                    "/${Gson().toJson(it)}")})
                         }
                         composable(ConstantViews.REGISTER_VIEW.route){
                             RegisterView(context = baseContext, viewModel = registerVM)
                         }
-                        composable(ConstantViews.DASHSTUDENT_VIEW.route+ "/{studentName}"){
+                        composable(ConstantViews.DASHSTUDENT_VIEW.route+ "/{studentProgressInfo}"){
                             backStackEntry ->
-                            val studenName = backStackEntry.arguments?.getString("studentName")
-                            StudentDashView(studentName = studenName?:"")
+                            val studenPInfoJson = backStackEntry.arguments
+                                ?.getString("studentProgressInfo")
+                            val studenProgressInfo = Gson()
+                                .fromJson(studenPInfoJson,ProgressStudent::class.java)
+                            StudentDashView(studentProgressInfo = studenProgressInfo,
+                                navToCronograma =  {navController.navigate(ConstantViews.CRONOGRAMA.route)})
+                        }
+                        composable(ConstantViews.CRONOGRAMA.route){
+                            CronogramaPDF()
                         }
                     }
                 }
@@ -65,5 +76,6 @@ class MainActivity : ComponentActivity() {
 enum class ConstantViews(val route: String){
     LOGIN_VIEW("LoginView"),
     REGISTER_VIEW("RegisterView"),
-    DASHSTUDENT_VIEW("DashboardStudentView")
+    DASHSTUDENT_VIEW("DashboardStudentView"),
+    CRONOGRAMA("Cronograma")
 }

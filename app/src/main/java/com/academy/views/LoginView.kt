@@ -34,12 +34,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.academy.R
+import com.academy.model.apiInteractions.DTOs.ProgressStudent
 import com.academy.modelViews.LoginVM
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginView(viewModel: LoginVM, navToRegister: () -> Unit, context: Context, navToDashBoard: (String) -> Unit){
+fun LoginView(viewModel: LoginVM, navToRegister: () -> Unit, context: Context, navToDashBoard: (ProgressStudent?) -> Unit){
 
     val email : String by viewModel.email.observeAsState(initial = "")
     val password : String by viewModel.password.observeAsState(initial = "")

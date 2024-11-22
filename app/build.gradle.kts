@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
     //firebase
