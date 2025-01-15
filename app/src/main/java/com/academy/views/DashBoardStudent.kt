@@ -43,10 +43,14 @@ import coil.compose.AsyncImage
 import com.academy.Constants
 import com.academy.R
 import com.academy.model.apiInteractions.DTOs.ProgressStudent
+import com.google.gson.Gson
 
 @Composable
 //@Preview(showSystemUi = true)
-fun StudentDashView(studentProgressInfo: ProgressStudent?,navToCronograma: () -> Unit){
+fun StudentDashView(studentProgressInfo: ProgressStudent?,
+                    navToCronograma: () -> Unit,
+                    navToWeekSelector: (String) -> Unit
+) {
     var currentBimester = studentProgressInfo?.currentBimester?: 0
     Column {
         Column(modifier = Modifier
@@ -75,7 +79,14 @@ fun StudentDashView(studentProgressInfo: ProgressStudent?,navToCronograma: () ->
             if (currentBimester != 0) {
                 for (i in 1..currentBimester){
                     cardMenu(picRef = R.drawable.bimesterpic, contDescription = "Bimester pic",
-                        txtCard = "Bimestre $i", onClick = {})
+                        txtCard = "Bimestre $i", onClick = {
+                            val map = hashMapOf(
+                                "careerId" to studentProgressInfo?.student?.choosenCareer?.careerId,
+                                "bimesterNum" to i
+                            )
+
+                            navToWeekSelector(Gson().toJson(map))
+                        })
                 }
             }else{
                 Log.e(Constants.LOG_TAG.toString(),"StudentDashView: ProgressStudent esta vacio")

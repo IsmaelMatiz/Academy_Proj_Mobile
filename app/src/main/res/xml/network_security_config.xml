@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">146.235.33.173</domain> <!-- Dirección IP de tu servidor -->
-        <domain includeSubdomains="true">192.168.1.5</domain> <!-- Dirección IP de pruebas locales -->
+        <domain includeSubdomains="true">146.235.33.173</domain> <!-- Dirección IP de servidor -->
+        <domain includeSubdomains="true">192.168.1.3</domain> <!-- Dirección IP de pruebas locales -->
     </domain-config>
 </network-security-config>

@@ -6,6 +6,6 @@ enum class UserTypes(){
 }
 
 enum class Constants(val constVal: String){
-    BASE_URL("http://192.168.1.5:8080/api/"),
+    BASE_URL("http://192.168.1.3:8080/api/"),
     LOG_TAG("AcademyDebug")
 }

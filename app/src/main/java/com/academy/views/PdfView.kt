@@ -15,7 +15,7 @@ import java.net.URLEncoder
 fun CronogramaPDF() {
     // setting the link of the pdf into a variable
     val url = "https://firebasestorage.googleapis.com/v0/b/academy-it-2024.appspot.com/o/Calendario-academico-ing-software.pdf?alt=media&token=70734519-bb45-4472-9c2d-f8cb14996744"
-    val encodedUrl = URLEncoder.encode(url, "UTF-8")
+val encodedUrl = URLEncoder.encode(url, "UTF-8")
 
     Surface(
         modifier = Modifier.fillMaxSize()
