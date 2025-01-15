@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -41,6 +42,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,7 +60,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.academy.R
 import com.academy.modelViews.LessonVM
 import kotlinx.coroutines.launch
@@ -153,9 +159,30 @@ fun LessonView(careerId:Int, bimesterNum: Int, weekNum: Int, viewModel: LessonVM
 
 @Composable
 fun showVideoLesson(url:String, titleLesson: String, context: Context) {
-    /*val exoPlayer = remember {
-        ExoPla
-    }*/
+    val exoPlayer = ExoPlayer.Builder(context).build()
+
+    val mediaSource = remember (url){
+        MediaItem.fromUri(url)
+    }
+
+    LaunchedEffect(mediaSource) {
+        exoPlayer.setMediaItem(mediaSource)
+        exoPlayer.prepare()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
+    AndroidView(factory = { ctx ->
+        PlayerView(ctx).apply {
+            player = exoPlayer
+        }
+    },
+        modifier = Modifier.fillMaxWidth()
+            .height(200.dp))
 }
 
 @Composable

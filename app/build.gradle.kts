@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.academy"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.academy"
@@ -72,7 +72,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
-
+    implementation("androidx.media3:media3-exoplayer:1.5.1")
+    implementation("androidx.media3:media3-ui:1.5.1")
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
