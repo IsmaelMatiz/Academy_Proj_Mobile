@@ -148,7 +148,8 @@ fun LessonView(careerId:Int, bimesterNum: Int, weekNum: Int, viewModel: LessonVM
                             } else {
                                 showVideoLesson(lessons[choseenLeson].linkToContent,
                                     lessons[choseenLeson].lessonTitle,
-                                    context)
+                                    context,
+                                    lessons[choseenLeson].contentDescrip)
                             }
                     }
                 }
@@ -158,7 +159,8 @@ fun LessonView(careerId:Int, bimesterNum: Int, weekNum: Int, viewModel: LessonVM
 }
 
 @Composable
-fun showVideoLesson(url:String, titleLesson: String, context: Context) {
+fun showVideoLesson(url:String, titleLesson: String, context: Context,
+                    description: String) {
     val exoPlayer = ExoPlayer.Builder(context).build()
 
     val mediaSource = remember (url){
@@ -176,13 +178,36 @@ fun showVideoLesson(url:String, titleLesson: String, context: Context) {
         }
     }
 
-    AndroidView(factory = { ctx ->
-        PlayerView(ctx).apply {
-            player = exoPlayer
+    Column(modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top)
+    {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .weight(0.09f, true)
+            .padding(bottom = 10.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = titleLesson,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold)
         }
-    },
-        modifier = Modifier.fillMaxWidth()
-            .height(200.dp))
+        Column(
+            modifier = Modifier.weight(0.8f)
+        ) {
+            AndroidView(factory = { ctx ->
+                PlayerView(ctx).apply {
+                    player = exoPlayer
+                }
+            },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp)
+            )
+
+            Text(text = description)
+        }
+    }
 }
 
 @Composable
